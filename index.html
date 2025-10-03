@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>Blefjell Hytteutleie</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: sans-serif; background: #000; color: #fff; overflow-x: hidden; }
+
+    /* ---------- HEADER ---------- */
+    header {
+      width: 100%;
+      position: fixed;
+      top: 0; left: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      opacity: 0; transform: translateY(-50px);
+    }
+    header img { height: 50px; transition: height 0.3s ease; }
+    nav ul { display: flex; list-style: none; gap: 30px; }
+    nav a {
+      position: relative; text-decoration: none; color: #fff; font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+    nav a::after {
+      content: ""; position: absolute; left: 0; bottom: -5px;
+      width: 0%; height: 2px; background: #d4af7a; transition: width 0.3s ease;
+    }
+    nav a:hover::after { width: 100%; }
+    nav a:hover { color: #d4af7a; }
+
+    .header-cta {
+      padding: 10px 25px;
+      background: #d4af7a; color: #000; border: none; border-radius: 30px;
+      font-size: 1rem; font-weight: bold; cursor: pointer;
+      opacity: 0; transform: translateY(-20px);
+      transition: background 0.3s ease;
+    }
+    .header-cta:hover { background: #fff; }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      position: relative; height: 100vh;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; overflow: hidden;
+    }
+    .hero::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at center, #1a1a1a, #000); z-index: 0;
+    }
+    .gradient-overlay {
+      position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: conic-gradient(from 0deg, #d4af7a, #6e4f2f, #d4af7a);
+      mix-blend-mode: overlay; opacity: 0.15; z-index: 0;
+    }
+    .hero img {
+      max-width: 450px; height: auto; opacity: 0; transform: scale(0.8);
+      position: relative; z-index: 2;
+    }
+    .cta {
+      margin-top: 40px; padding: 15px 40px;
+      background: #d4af7a; color: #000; border: none; border-radius: 50px;
+      font-size: 1.1rem; font-weight: bold; cursor: pointer;
+      opacity: 0; transform: translateY(30px); transition: background 0.3s ease;
+      position: relative; z-index: 2;
+    }
+    .cta:hover { background: #fff; }
+
+    /* ---------- CONTENT ---------- */
+    section.content {
+      min-height: 200vh; padding: 100px 60px; color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <img src="blefjell-1024x356.png" alt="Blefjell Logo" class="header-logo">
+    <nav>
+      <ul>
+        <li><a href="#">Hjem</a></li>
+        <li><a href="#">Våre hytter</a></li>
+        <li><a href="#">Om Blefjell</a></li>
+        <li><a href="#">Om oss</a></li>
+        <li><a href="#">Kontakt oss</a></li>
+      </ul>
+    </nav>
+    <button class="header-cta">Gå til booking</button>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="gradient-overlay"></div>
+    <img src="blefjell-1024x356.png" alt="Blefjell Hytteutleie Logo" class="hero-logo">
+    <button class="cta">Gå til booking</button>
+  </section>
+
+  <!-- CONTENT -->
+  <section class="content">
+    <h2>Innhold</h2>
+    <p>Her kan du legge inn mer informasjon om hyttene eller destinasjonen.</p>
+  </section>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Intro animasjoner
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+    tl.to("header", { duration: 1, opacity: 1, y: 0 });
+    tl.to(".header-cta", { duration: 0.8, opacity: 1, y: 0 }, "-=0.6");
+    tl.to(".hero-logo", { duration: 1.5, opacity: 1, scale: 1, ease: "back.out(1.7)" }, "-=0.3");
+    tl.to(".cta", { duration: 1, opacity: 1, y: 0 }, "-=0.5");
+
+    // Gradient rotasjon
+    gsap.to(".gradient-overlay", {
+      rotation: 360, duration: 40, repeat: -1, ease: "linear"
+    });
+
+    // Header shrink
+    gsap.to("header", {
+      scrollTrigger: { start: "top top", end: 99999, scrub: true },
+      padding: "10px 40px", backgroundColor: "rgba(0,0,0,0.9)"
+    });
+    gsap.to("header img", {
+      scrollTrigger: { start: "top top", end: 99999, scrub: true },
+      height: 35
+    });
+
+    // Hero parallax
+    gsap.to(".hero-logo", {
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
+      y: -100
+    });
+    gsap.to(".gradient-overlay", {
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
+      y: 150
+    });
+
+    // Fade ut hero-logo og CTA
+    gsap.to([".hero-logo", ".cta"], {
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
+      opacity: 0, y: -50
+    });
+
+    // Puls-animasjon på header CTA når hero-CTA er borte
+    ScrollTrigger.create({
+      trigger: ".hero", start: "bottom top",
+      onEnter: () => {
+        gsap.to(".header-cta", {
+          scale: 1.1, duration: 0.8, yoyo: true, repeat: -1, ease: "power1.inOut"
+        });
+      },
+      onLeaveBack: () => {
+        gsap.to(".header-cta", { scale: 1, duration: 0.3, clearProps: "all" });
+      }
+    });
+  </script>
+</body>
+</html>
